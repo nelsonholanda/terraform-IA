@@ -1,0 +1,22 @@
+{
+  "name": "terraform-mcp-project",
+  "version": "1.0.0",
+  "description": "Project using MCP with Terraform",
+  "main": "dist/terraform-mcp-server.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/terraform-mcp-server.js",
+    "dev": "tsc && node dist/terraform-mcp-server.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.13.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0"
+  },
+  "keywords": ["terraform", "mcp", "infrastructure"],
+  "author": "",
+  "license": "MIT"
+} 
