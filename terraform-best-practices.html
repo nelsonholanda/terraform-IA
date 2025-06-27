@@ -5,238 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terraform Best Practices - HashiCorp Guidelines</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d3748 100%);
-            color: #e2e8f0;
-            line-height: 1.6;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 40px 0;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .header h1 {
-            font-size: 3rem;
-            margin-bottom: 10px;
-            background: linear-gradient(45deg, #00d4aa, #7c3aed);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .header p {
-            font-size: 1.2rem;
-            opacity: 0.8;
-        }
-
-        .section {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .section h2 {
-            color: #00d4aa;
-            font-size: 2rem;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #00d4aa;
-            padding-bottom: 10px;
-        }
-
-        .practice-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin: 20px 0;
-        }
-
-        .practice-card {
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 10px;
-            padding: 20px;
-            border-left: 4px solid #00d4aa;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .practice-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-        }
-
-        .practice-card h3 {
-            color: #00d4aa;
-            margin-bottom: 10px;
-            font-size: 1.2rem;
-        }
-
-        .practice-card.status-implemented {
-            border-left-color: #10b981;
-        }
-
-        .practice-card.status-partial {
-            border-left-color: #f59e0b;
-        }
-
-        .practice-card.status-pending {
-            border-left-color: #ef4444;
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .status-implemented .status-badge {
-            background: #10b981;
-            color: white;
-        }
-
-        .status-partial .status-badge {
-            background: #f59e0b;
-            color: white;
-        }
-
-        .status-pending .status-badge {
-            background: #ef4444;
-            color: white;
-        }
-
-        .file-structure {
-            background: #1a1a1a;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-            font-family: 'Courier New', monospace;
-            border: 1px solid #374151;
-        }
-
-        .file-structure pre {
-            color: #e2e8f0;
-            line-height: 1.5;
-        }
-
-        .file-structure .folder {
-            color: #00d4aa;
-        }
-
-        .file-structure .file {
-            color: #60a5fa;
-        }
-
-        .code-example {
-            background: #1a1a1a;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 15px 0;
-            font-family: 'Courier New', monospace;
-            border: 1px solid #374151;
-            overflow-x: auto;
-        }
-
-        .code-example pre {
-            color: #e2e8f0;
-        }
-
-        .code-example .comment {
-            color: #6b7280;
-        }
-
-        .code-example .keyword {
-            color: #f472b6;
-        }
-
-        .code-example .string {
-            color: #34d399;
-        }
-
-        .code-example .number {
-            color: #fbbf24;
-        }
-
-        .benefits {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin: 20px 0;
-        }
-
-        .benefit {
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .benefit h4 {
-            color: #00d4aa;
-            margin-bottom: 10px;
-        }
-
-        .interactive-demo {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 15px;
-            padding: 30px;
-            margin: 30px 0;
-            text-align: center;
-        }
-
-        .btn {
-            background: linear-gradient(45deg, #00d4aa, #7c3aed);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            margin: 10px;
-            transition: transform 0.3s ease;
-        }
-
-        .btn:hover {
-            transform: scale(1.05);
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 50px;
-            padding: 20px;
-            opacity: 0.8;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2rem;
-            }
-            
-            .practice-grid {
-                grid-template-columns: 1fr;
-            }
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #1a1a1a 0%, #2d3748 100%); color: #e2e8f0; line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .header { text-align: center; margin-bottom: 40px; padding: 40px 0; background: rgba(255,255,255,0.05); border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); }
+        .header h1 { font-size: 3rem; margin-bottom: 10px; background: linear-gradient(45deg, #00d4aa, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .header p { font-size: 1.2rem; opacity: 0.8; }
+        .section { background: rgba(255,255,255,0.05); border-radius: 15px; padding: 30px; margin-bottom: 30px; border: 1px solid rgba(255,255,255,0.1); }
+        .section h2 { color: #00d4aa; font-size: 2rem; margin-bottom: 20px; border-bottom: 2px solid #00d4aa; padding-bottom: 10px; }
+        .practice-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 20px 0; }
+        .practice-card { background: rgba(255,255,255,0.08); border-radius: 10px; padding: 20px; border-left: 4px solid #00d4aa; transition: transform 0.3s ease; }
+        .practice-card:hover { transform: translateY(-5px); }
+        .practice-card h3 { color: #00d4aa; margin-bottom: 10px; font-size: 1.2rem; }
+        .status-badge { display: inline-block; padding: 4px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: bold; margin-bottom: 10px; background: #10b981; color: white; }
+        .file-structure { background: #1a1a1a; border-radius: 10px; padding: 20px; margin: 20px 0; font-family: 'Courier New', monospace; border: 1px solid #374151; }
+        .file-structure pre { color: #e2e8f0; line-height: 1.5; }
+        .file-structure .folder { color: #00d4aa; }
+        .file-structure .file { color: #60a5fa; }
+        .code-example { background: #1a1a1a; border-radius: 10px; padding: 20px; margin: 15px 0; font-family: 'Courier New', monospace; border: 1px solid #374151; overflow-x: auto; }
+        .code-example pre { color: #e2e8f0; }
+        .code-example .comment { color: #6b7280; }
+        .code-example .keyword { color: #f472b6; }
+        .code-example .string { color: #34d399; }
+        .code-example .number { color: #fbbf24; }
+        .benefits { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 20px 0; }
+        .benefit { background: rgba(255,255,255,0.08); border-radius: 10px; padding: 20px; text-align: center; }
+        .benefit h4 { color: #00d4aa; margin-bottom: 10px; }
+        .interactive-demo { background: rgba(0,0,0,0.3); border-radius: 15px; padding: 30px; margin: 30px 0; text-align: center; }
+        .btn { background: linear-gradient(45deg, #00d4aa, #7c3aed); color: white; border: none; padding: 15px 30px; border-radius: 25px; font-size: 1.1rem; cursor: pointer; margin: 10px; transition: transform 0.3s ease; }
+        .btn:hover { transform: scale(1.05); }
+        .footer { text-align: center; margin-top: 50px; padding: 20px; opacity: 0.8; border-top: 1px solid rgba(255,255,255,0.1); }
+        @media (max-width: 768px) { .header h1 { font-size: 2rem; } .practice-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -275,49 +74,49 @@
             <h2>✅ Boas Práticas Implementadas</h2>
             
             <div class="practice-grid">
-                <div class="practice-card status-implemented">
+                <div class="practice-card">
                     <div class="status-badge">✅ Implementado</div>
                     <h3>📁 Separação por Responsabilidade</h3>
                     <p>Cada arquivo tem uma responsabilidade específica: networking, security, compute, etc. Facilita manutenção e navegação.</p>
                 </div>
 
-                <div class="practice-card status-implemented">
+                <div class="practice-card">
                     <div class="status-badge">✅ Implementado</div>
                     <h3>🏷️ Nomenclatura Consistente</h3>
                     <p>Recursos nomeados com prefixo "nh-" seguindo padrão: nh-ecs, nh-alb, nh-teste. Evita conflitos e facilita identificação.</p>
                 </div>
 
-                <div class="practice-card status-implemented">
+                <div class="practice-card">
                     <div class="status-badge">✅ Implementado</div>
                     <h3>🏷️ Tagging Estratégico</h3>
                     <p>Todos os recursos taggeados com Environment, Project, ManagedBy e Name. Facilita gerenciamento de custos e compliance.</p>
                 </div>
 
-                <div class="practice-card status-implemented">
+                <div class="practice-card">
                     <div class="status-badge">✅ Implementado</div>
                     <h3>🔒 Princípio do Menor Privilégio</h3>
                     <p>Security groups otimizados: apenas acesso necessário entre ALB e ECS tasks. Sem acesso SSH desnecessário.</p>
                 </div>
 
-                <div class="practice-card status-implemented">
+                <div class="practice-card">
                     <div class="status-badge">✅ Implementado</div>
                     <h3>📊 Monitoramento Integrado</h3>
                     <p>CloudWatch logs, métricas e alarms configurados. Auto scaling baseado em métricas de CPU.</p>
                 </div>
 
-                <div class="practice-card status-implemented">
+                <div class="practice-card">
                     <div class="status-badge">✅ Implementado</div>
                     <h3>🔄 Versionamento de Providers</h3>
                     <p>Versões específicas definidas em versions.tf. Garante reprodutibilidade e estabilidade.</p>
                 </div>
 
-                <div class="practice-card status-implemented">
+                <div class="practice-card">
                     <div class="status-badge">✅ Implementado</div>
                     <h3>📝 Documentação Completa</h3>
                     <p>README.md detalhado com arquitetura, funcionalidades, como usar e outputs importantes.</p>
                 </div>
 
-                <div class="practice-card status-implemented">
+                <div class="practice-card">
                     <div class="status-badge">✅ Implementado</div>
                     <h3>⚡ Auto Scaling Inteligente</h3>
                     <p>Target tracking scaling com cooldowns apropriados. Escala baseado em métricas reais de utilização.</p>
@@ -449,10 +248,8 @@
     </div>
 
     <script>
-        // Set current date
         document.getElementById('current-date').textContent = new Date().toLocaleDateString('pt-BR');
-
-        // Interactive demo functions
+        
         function showPractice(practice) {
             const practices = {
                 security: {
@@ -474,20 +271,6 @@
                 alert(`${practiceInfo.title}\n\n${practiceInfo.content}`);
             }
         }
-
-        // Add some interactive effects
-        document.addEventListener('DOMContentLoaded', function() {
-            // Add click effects to practice cards
-            const cards = document.querySelectorAll('.practice-card');
-            cards.forEach(card => {
-                card.addEventListener('click', function() {
-                    this.style.transform = 'scale(0.98)';
-                    setTimeout(() => {
-                        this.style.transform = '';
-                    }, 150);
-                });
-            });
-        });
     </script>
 </body>
-</html> 
+</html>
