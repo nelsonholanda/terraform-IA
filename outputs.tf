@@ -187,22 +187,4 @@ output "cpu_high_alarm_arn" {
 output "cpu_low_alarm_arn" {
   description = "ARN of the low CPU alarm"
   value       = aws_cloudwatch_metric_alarm.nh_teste_cpu_low.arn
-}
-
-# S3 Website URL
-output "s3_website_url" {
-  description = "URL do website hospedado no S3"
-  value       = aws_s3_bucket_website_configuration.static_website.website_endpoint
-}
-
-# S3 Bucket Name
-output "s3_bucket_name" {
-  description = "Nome do bucket S3"
-  value       = aws_s3_bucket.static_website.bucket
-}
-
-# ALB URL
-output "alb_url" {
-  description = "URL completa do ALB"
-  value       = "http://${aws_lb.main.dns_name}"
 } 
