@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terraform BIA Project - Infrastructure as Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            color: #666;
+        }
+        
+        .project-info {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .project-info h2 {
+            color: #667eea;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 25px;
+            border-left: 5px solid #667eea;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .feature-card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .feature-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .feature-card li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .feature-card li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .file-structure {
+            background: #2d3748;
+            color: #e2e8f0;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 25px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+        
+        .file-structure pre {
+            line-height: 1.5;
+        }
+        
+        .folder {
+            color: #ffd700;
+            font-weight: bold;
+        }
+        
+        .file {
+            color: #87ceeb;
+        }
+        
+        .comment {
+            color: #a0aec0;
+        }
+        
+        .download-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin-top: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .download-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin: 10px;
+            transition: transform 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .download-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .instructions {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .instructions h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏗️ Terraform BIA Project</h1>
+            <p>Infrastructure as Code - AWS ECS with Auto Scaling</p>
+        </div>
+
+        <div class="project-info">
+            <h2>📋 Sobre o Projeto</h2>
+            <p>Este projeto Terraform implementa uma infraestrutura completa na AWS usando ECS (Elastic Container Service) com Auto Scaling, Load Balancer, RDS Database e todas as configurações de segurança necessárias.</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3>🚀 Compute & Container</h3>
+                <ul>
+                    <li>ECS Cluster com Fargate</li>
+                    <li>Auto Scaling Group configurado</li>
+                    <li>Launch Template otimizado</li>
+                    <li>Task Definition personalizada</li>
+                    <li>ECR Repository</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <h3>⚖️ Load Balancing</h3>
+                <ul>
+                    <li>Application Load Balancer (ALB)</li>
+                    <li>Target Groups configurados</li>
+                    <li>Health Checks automáticos</li>
+                    <li>Distribuição de tráfego</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <h3>🗄️ Database</h3>
+                <ul>
+                    <li>RDS Instance configurada</li>
+                    <li>AWS Secrets Manager</li>
+                    <li>Backup automático</li>
+                    <li>Multi-AZ deployment</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <h3>🔒 Security</h3>
+                <ul>
+                    <li>Security Groups otimizados</li>
+                    <li>IAM Roles e Policies</li>
+                    <li>Princípio do menor privilégio</li>
+                    <li>Criptografia em trânsito</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <h3>📊 Monitoring</h3>
+                <ul>
+                    <li>CloudWatch Log Groups</li>
+                    <li>Métricas personalizadas</li>
+                    <li>Alarms configurados</li>
+                    <li>Container Insights</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <h3>🔧 DevOps</h3>
+                <ul>
+                    <li>Terraform State Management</li>
+                    <li>Modular architecture</li>
+                    <li>Environment variables</li>
+                    <li>User data scripts</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="project-info">
+            <h2>📁 Estrutura do Projeto</h2>
+            <div class="file-structure">
+                <pre>
+<span class="folder">terraform-bia-terraform-bia/</span>
+├── <span class="file">README.md</span>                      <span class="comment"># Documentação do projeto</span>
+├── <span class="file">provider.tf</span>                   <span class="comment"># Configuração do provider AWS</span>
+├── <span class="file">variables.tf</span>                  <span class="comment"># Variáveis do projeto</span>
+├── <span class="file">outputs.tf</span>                    <span class="comment"># Outputs importantes</span>
+├── <span class="file">locals.tf</span>                     <span class="comment"># Variáveis locais</span>
+├── <span class="file">state_config.tf</span>               <span class="comment"># Configuração do state</span>
+│
+├── <span class="comment"># Compute Resources</span>
+├── <span class="file">aws_ecs_cluster.tf</span>            <span class="comment"># ECS Cluster</span>
+├── <span class="file">aws_ecs_service_bia.tf</span>        <span class="comment"># ECS Service</span>
+├── <span class="file">aws_task_def_bia_ecs.tf</span>       <span class="comment"># Task Definition</span>
+├── <span class="file">aws_ecs_capacity_provider.tf</span>  <span class="comment"># Capacity Provider</span>
+├── <span class="file">aws_launch_template.tf</span>        <span class="comment"># Launch Template</span>
+├── <span class="file">asg_ecs_bia_alb.tf</span>           <span class="comment"># Auto Scaling Group</span>
+├── <span class="file">aws_instance.tf</span>               <span class="comment"># EC2 Instance</span>
+│
+├── <span class="comment"># Load Balancer</span>
+├── <span class="file">aws_alb.tf</span>                    <span class="comment"># Application Load Balancer</span>
+│
+├── <span class="comment"># Database</span>
+├── <span class="file">aws_db_instance.tf</span>            <span class="comment"># RDS Database</span>
+├── <span class="file">aws_secrets_bia_db.tf</span>         <span class="comment"># Database Secrets</span>
+│
+├── <span class="comment"># Security</span>
+├── <span class="file">security_groups.tf</span>           <span class="comment"># Security Groups</span>
+├── <span class="file">aws_iam.tf</span>                    <span class="comment"># IAM Policies</span>
+├── <span class="file">aws_iam_ecs_role.tf</span>          <span class="comment"># ECS IAM Role</span>
+├── <span class="file">aws_iam_ecs_role_task.tf</span>     <span class="comment"># ECS Task Role</span>
+│
+├── <span class="comment"># Monitoring</span>
+├── <span class="file">aws_cloudwatch_log_group_bia.tf</span> <span class="comment"># CloudWatch Logs</span>
+│
+├── <span class="comment"># Container Registry</span>
+├── <span class="file">aws_ecr.tf</span>                    <span class="comment"># Elastic Container Registry</span>
+│
+└── <span class="comment"># Scripts</span>
+    ├── <span class="file">userdata.sh</span>               <span class="comment"># User data script</span>
+    └── <span class="file">nhoregon.pemZone.Identifier</span> <span class="comment"># Key pair</span>
+                </pre>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <h3>🚀 Como Usar</h3>
+            
+            <h4>1. Pré-requisitos</h4>
+            <div class="code-block">
+# Instalar Terraform
+curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+sudo apt-get update && sudo apt-get install terraform
+
+# Configurar AWS CLI
+aws configure
+            </div>
+
+            <h4>2. Deploy da Infraestrutura</h4>
+            <div class="code-block">
+# Navegar para o diretório do projeto
+cd terraform-bia-terraform-bia
+
+# Inicializar Terraform
+terraform init
+
+# Planejar o deploy
+terraform plan
+
+# Aplicar a infraestrutura
+terraform apply
+            </div>
+
+            <h4>3. Verificar Recursos</h4>
+            <div class="code-block">
+# Ver outputs importantes
+terraform output
+
+# Verificar estado
+terraform show
+
+# Listar recursos
+terraform state list
+            </div>
+
+            <h4>4. Limpeza (quando necessário)</h4>
+            <div class="code-block">
+# Destruir toda a infraestrutura
+terraform destroy
+            </div>
+        </div>
+
+        <div class="download-section">
+            <h3>📥 Arquivos do Projeto</h3>
+            <p>O projeto foi extraído e está disponível no diretório <code>terraform-bia-terraform-bia/</code></p>
+            <a href="terraform-bia-terraform-bia.zip" class="download-btn" download>
+                📦 Download ZIP Original
+            </a>
+        </div>
+
+        <div class="footer">
+            <p>🛠️ Terraform BIA Project - Infrastructure as Code</p>
+            <p>📅 Projeto extraído e configurado para teste</p>
+        </div>
+    </div>
+
+    <script>
+        // Add some interactivity
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.feature-card');
+            
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.borderLeft = '5px solid #764ba2';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.borderLeft = '5px solid #667eea';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
